@@ -33,24 +33,6 @@ public class SimpleAppWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
         views.setTextViewText(R.id.user_given_title, widgetTitle);
-//        views.setTextViewText(R.id.appwidget_provider_token, "Shabadaba");
-
-
-//        appWidgetManager.updateAppWidget(appWidgetId, views);
-
-//        final AppWidgetManager widgetManager = appWidgetManager;
-//        views2 = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
-        // Calling async task to get json
-//        new GetItems().execute();
-
-//        GetItems getItems = new GetItems(new GetItems.AsyncResponse(){
-
-//            @Override
-//            void processFinish(String output){
-                //Here you will receive the result fired from async class
-                //of onPostExecute(result) method.
-//            }
-//        }).execute();
         //create AsyncResponse for treating the response of GetItems
         GetItems.AsyncResponse responseMethod = new GetItems.AsyncResponse(){
             @Override
@@ -72,20 +54,24 @@ public class SimpleAppWidget extends AppWidgetProvider {
             }
         };
         new GetItems(responseMethod, widgetProviderToken).execute();
-
-//        views.setTextViewText(R.id.appwidget_provider_token, "Shabadaba");
-//        processFinish("asd");
-//        GetItems.execute();
     }
-
-//    static public void processFinish(String output){
-//        views2.setTextViewText(R.id.appwidget_provider_token, "Shabadaba");
-//    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
+
+//            Intent serviceIntent = new Intent(context, MyService.class);
+//            serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+//            serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
+//            PendingIntent pendingServiceIntent = PendingIntent.getService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+//            views.setOnClickPendingIntent(R.id.refresh, pendingServiceIntent);
+//
+//            context.startService(serviceIntent);
+//            appWidgetManager.updateAppWidget(appWidgetIds[i], views);
+
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
