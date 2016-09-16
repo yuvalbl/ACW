@@ -58,7 +58,7 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="appwidget_provider_token">TOKEN_ID</string>
+    <string name="appwidget_provider_token"></string>
     <string name="configure">Set Provider Token</string>
     <string name="user_given_title">Set Widget Title</string>
     <string name="add_widget">Add widget</string>
