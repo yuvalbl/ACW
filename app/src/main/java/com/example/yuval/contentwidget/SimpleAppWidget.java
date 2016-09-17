@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -40,10 +41,13 @@ public class SimpleAppWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.user_given_title, widgetTitle);
 
         //set text color
-        views.setTextColor(R.id.user_given_title, theme.getTextColor());
-        views.setTextColor(R.id.widget_content, theme.getTextColor());
+        int textColor = ContextCompat.getColor(context, theme.getTextColor());
+        views.setTextColor(R.id.user_given_title, textColor);
+        views.setTextColor(R.id.widget_content, textColor);
+
         //set background color
-        views.setInt(R.id.appwidget_layout, "setBackgroundColor", theme.getBackgroundColor());
+        int bgColor = ContextCompat.getColor(context, theme.getBackgroundColor());
+        views.setInt(R.id.appwidget_layout, "setBackgroundColor", bgColor);
 
         //update style
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -110,8 +114,7 @@ public class SimpleAppWidget extends AppWidgetProvider {
             widgetProviderToken = SimpleAppWidgetConfigureActivity.loadProviderTokenPref(context, widgetId);
 
             final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
-//            Log.d("getRandomItem: ", "> onUpdate , RandomItem ");
-            updateContent(appWidgetManager, views, widgetId, widgetProviderToken);
+            views.setTextViewText(R.id.widget_content, "Loading...");
 
             // Register an onClickListener
             Intent intent = new Intent(context, SimpleAppWidget.class);
@@ -122,6 +125,8 @@ public class SimpleAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.imageReloadButton, pendingIntent);
             appWidgetManager.updateAppWidget(widgetId, views);
+
+            updateContent(appWidgetManager, views, widgetId, widgetProviderToken);
         }
     }
 

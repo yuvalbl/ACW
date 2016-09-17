@@ -3,4 +3,20 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+
+    <color name="classicBlackText">#ffffff</color>
+    <color name="classicBlackBackground">#b4000000</color>
+
+    <color name="brightWhiteText">#000000</color>
+    <color name="brightWhiteBackground">#e6ffffff</color>
+
+    <color name="blueSkyText">#ffffff</color>
+    <color name="blueSkyBackground">#b41a62ff</color>
+
+    <color name="redRubyText">#ffffff</color>
+    <color name="redRubyBackground">#a0ff0000</color>
+
+    <color name="greenEmeraldText">#0040ff</color>
+    <color name="greenEmeraldBackground">#b443ff40</color>
 </resources>

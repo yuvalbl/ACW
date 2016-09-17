@@ -12,24 +12,24 @@ public class SimpleAppWidgetTheme {
     SimpleAppWidgetTheme(String theme) {
         switch (theme) {
             case "Classic Black":
-                textColor = Color.WHITE;
-                backgroundColor = Color.BLACK;
+                textColor = R.color.classicBlackText;
+                backgroundColor = R.color.classicBlackBackground;
                 break;
             case "Bright White":
-                textColor = Color.BLACK;
-                backgroundColor = Color.WHITE;
+                textColor = R.color.brightWhiteText;
+                backgroundColor = R.color.brightWhiteBackground;
                 break;
             case "Blue Sky":
-                textColor = Color.WHITE;
-                backgroundColor = Color.BLUE;
+                textColor = R.color.blueSkyText;
+                backgroundColor = R.color.blueSkyBackground;
                 break;
             case "Red Ruby":
-                textColor = Color.WHITE;
-                backgroundColor = Color.RED;
+                textColor = R.color.redRubyText;
+                backgroundColor = R.color.redRubyBackground;
                 break;
             case "Green Emerald":
-                textColor = Color.BLUE;
-                backgroundColor = Color.GREEN;
+                textColor = R.color.greenEmeraldText;
+                backgroundColor = R.color.greenEmeraldBackground;
                 break;
         }
     }

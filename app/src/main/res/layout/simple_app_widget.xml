@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Widget Title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:padding="5px" />
