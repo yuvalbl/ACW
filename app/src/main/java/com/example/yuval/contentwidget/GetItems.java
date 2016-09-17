@@ -36,10 +36,15 @@ public class GetItems extends AsyncTask<String, Void, String> {
         // Making a request to url and getting response
         try {
 //            URL dataUrl = new URL("http://frontendfrontier.net/json/items.json");
-            URL dataUrl = new URL("https://acw-server.ddns.net/items?provider" + this.providerToken);
-            DataProvider dp = new DataProvider();
-            jsonStr = dp.sendGet(dataUrl);
+            if(this.providerToken != "" && this.providerToken != null) {
+                URL dataUrl = new URL("https://acw-server.ddns.net/items?provider=" + this.providerToken);
+                //dev
+//                URL dataUrl = new URL("https://acw-server.ddns.net/items?provider=TEST");
+                DataProvider dp = new DataProvider();
+                jsonStr = dp.sendGet(dataUrl);
+            }
             System.out.println("jsonStr: " + jsonStr);
+
 //            Log.d("Response: ", "> " + jsonStr);
 //            delegate.processFinish(jsonStr);
         }

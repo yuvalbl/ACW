@@ -83,6 +83,8 @@ public class DataProvider {
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
+        //release resources
+        con.disconnect();
         in.close();
 
         //return result

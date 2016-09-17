@@ -3,7 +3,8 @@
     android:layout_height="match_parent"
     android:background="#000"
     android:padding="@dimen/widget_margin"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:id="@+id/appwidget_layout">
 
     <TextView
         android:id="@+id/user_given_title"
@@ -11,20 +12,16 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Widget Title"
-        android:textColor="#ffffff"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:padding="5px" />
 
     <TextView
-        android:id="@+id/appwidget_provider_token"
+        android:id="@+id/widget_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="#000"
-        android:contentDescription="@string/appwidget_provider_token"
-        android:text="@string/appwidget_provider_token"
-        android:textColor="#ffffff"
+        android:text="@string/appwidget_loading"
         android:textSize="12sp"
         android:textStyle="bold|italic"
         android:layout_marginLeft="8dp"
@@ -37,7 +34,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageReloadButton"
         android:src="@android:drawable/ic_popup_sync"
-        android:background="#000"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true" />
 

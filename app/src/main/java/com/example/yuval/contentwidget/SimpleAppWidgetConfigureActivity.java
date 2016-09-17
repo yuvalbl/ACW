@@ -7,30 +7,39 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * The configuration screen for the {@link SimpleAppWidget SimpleAppWidget} AppWidget.
  */
-public class SimpleAppWidgetConfigureActivity extends Activity {
+public class SimpleAppWidgetConfigureActivity extends Activity implements AdapterView.OnItemSelectedListener  {
 
     private static final String PREFS_NAME = "com.example.yuval.contentwidget.SimpleAppWidget";
     private static final String PREF_TITLE_PREFIX_KEY = "appwidget_title_";
     private static final String PREF_PROVIDER_TOKEN_PREFIX_KEY = "appwidget_provider_token_";
+    private static final String PREF_THEME_PREFIX_KEY = "appwidget_theme_token_";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetTitleText;
     EditText mAppWidgetTokenIdText;
+    TextView mAppWidgetThemeText;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = SimpleAppWidgetConfigureActivity.this;
 
-            // When the button is clicked, store the string locally
+            // store the title string
             String widgetText = mAppWidgetTitleText.getText().toString();
             saveTitlePref(context, mAppWidgetId, widgetText);
+            // store the provider token string
             widgetText = mAppWidgetTokenIdText.getText().toString();
             saveProviderTokenPref(context, mAppWidgetId, widgetText);
-            System.out.println("widgetTextwidgetText: " + widgetText);
-
+            // store the theme string
+            widgetText = mAppWidgetThemeText.getText().toString();
+            saveThemePref(context, mAppWidgetId, widgetText);
 
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -60,6 +69,12 @@ public class SimpleAppWidgetConfigureActivity extends Activity {
         prefs.putString(PREF_PROVIDER_TOKEN_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
     }
+    // Write the prefix to the SharedPreferences object for this widget
+    static void saveThemePref(Context context, int appWidgetId, String text) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putString(PREF_THEME_PREFIX_KEY + appWidgetId, text);
+        prefs.apply();
+    }
 
     // Read the prefix from the SharedPreferences object for this widget.
     // If there is no preference saved, get the default from a resource
@@ -83,7 +98,13 @@ public class SimpleAppWidgetConfigureActivity extends Activity {
             return context.getString(R.string.appwidget_provider_token);
         }
     }
-
+    // Read the prefix from the SharedPreferences object for this widget.
+    // If there is no preference saved, get the default from a resource
+    static SimpleAppWidgetTheme loadThemePref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        String themeString = prefs.getString(PREF_THEME_PREFIX_KEY + appWidgetId, null);
+        return new SimpleAppWidgetTheme(themeString);
+    }
     static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.remove(PREF_TITLE_PREFIX_KEY + appWidgetId);
@@ -103,6 +124,18 @@ public class SimpleAppWidgetConfigureActivity extends Activity {
         mAppWidgetTokenIdText = (EditText) findViewById(R.id.appwidget_provider_token);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
+
+        //Set theme spinner
+        Spinner themeSpinner = (Spinner) findViewById(R.id.theme_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> themesAdapter = ArrayAdapter.createFromResource(this, R.array.pref_themes, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        themesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        themeSpinner.setAdapter(themesAdapter);
+        //set selected event listener
+        themeSpinner.setOnItemSelectedListener(this);
+
         // Find the widget id from the intent.
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -118,6 +151,21 @@ public class SimpleAppWidgetConfigureActivity extends Activity {
         }
 
         mAppWidgetTokenIdText.setText(loadProviderTokenPref(SimpleAppWidgetConfigureActivity.this, mAppWidgetId));
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mAppWidgetThemeText = (TextView) view;
+        String themeString = mAppWidgetThemeText.getText().toString();
+        Toast.makeText(SimpleAppWidgetConfigureActivity.this, themeString, Toast.LENGTH_SHORT).show();
+
+//        SimpleAppWidgetTheme theme  = new SimpleAppWidgetTheme(themeString);
+//        Toast.makeText(SimpleAppWidgetConfigureActivity.this, theme.getTextColor() +':' + theme.getBackgroundColor(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
 

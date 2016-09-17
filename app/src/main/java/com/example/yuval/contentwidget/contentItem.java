@@ -7,7 +7,6 @@ import java.util.Date;
  */
 public class contentItem {
     int id;
-//    provider = {"id":1,"token":"TEST"},
     String data;
     Date lastUpdated;
 }

@@ -30,12 +30,26 @@ public class SimpleAppWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, final AppWidgetManager appWidgetManager,
                                 final int appWidgetId) {
-
-        String widgetProviderToken = SimpleAppWidgetConfigureActivity.loadProviderTokenPref(context, appWidgetId);
+        //get settings data
         String widgetTitle = SimpleAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
+        String widgetProviderToken = SimpleAppWidgetConfigureActivity.loadProviderTokenPref(context, appWidgetId);
+        SimpleAppWidgetTheme theme = SimpleAppWidgetConfigureActivity.loadThemePref(context, appWidgetId);
+
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
         views.setTextViewText(R.id.user_given_title, widgetTitle);
+
+        //set text color
+        views.setTextColor(R.id.user_given_title, theme.getTextColor());
+        views.setTextColor(R.id.widget_content, theme.getTextColor());
+        //set background color
+        views.setInt(R.id.appwidget_layout, "setBackgroundColor", theme.getBackgroundColor());
+
+        //update style
+        appWidgetManager.updateAppWidget(appWidgetId, views);
+
+        Log.d("$$widgetProviderToken: ", "> " + widgetProviderToken);
+        Log.d("getTextColor: ", "> " + theme.getTextColor());
 
         updateContent(appWidgetManager, views, appWidgetId, widgetProviderToken);
     }
@@ -61,6 +75,9 @@ public class SimpleAppWidget extends AppWidgetProvider {
     static void updateContent (final AppWidgetManager appWidgetManager,
                                       final RemoteViews views, final int widgetId,
                                       String widgetProviderToken) {
+        if(widgetProviderToken == "" || widgetProviderToken == " " || widgetProviderToken == null)
+            return;
+
         GetItems.AsyncResponse responseMethod = new GetItems.AsyncResponse(){
             @Override
             public void processFinish(String output){
@@ -69,9 +86,9 @@ public class SimpleAppWidget extends AppWidgetProvider {
                 String item = getRandomContentItem(output);
 
                 if(item != null) {
-                    views.setTextViewText(R.id.appwidget_provider_token, item);
+                    views.setTextViewText(R.id.widget_content, item);
                 } else {
-                    views.setTextViewText(R.id.appwidget_provider_token, "Error occurred, Please try again later.");
+                    views.setTextViewText(R.id.widget_content, "Error occurred, Please try again later.");
 
                 }
                 appWidgetManager.updateAppWidget(widgetId, views);
@@ -96,9 +113,6 @@ public class SimpleAppWidget extends AppWidgetProvider {
 //            Log.d("getRandomItem: ", "> onUpdate , RandomItem ");
             updateContent(appWidgetManager, views, widgetId, widgetProviderToken);
 
-
-
-
             // Register an onClickListener
             Intent intent = new Intent(context, SimpleAppWidget.class);
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -108,51 +122,6 @@ public class SimpleAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.imageReloadButton, pendingIntent);
             appWidgetManager.updateAppWidget(widgetId, views);
-
-
-
-//            Intent configIntent = new Intent(context, SimpleAppWidget.class);
-//            PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, 0);
-//            views.setOnClickPendingIntent(R.id.imageReloadButton, configPendingIntent);
-//            appWidgetManager.updateAppWidget(appWidgetIds, views);
-
-
-
-
-//            Intent serviceIntent = new Intent(context, mysercice.class);
-//            serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-//            serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
-//            PendingIntent pendingServiceIntent = PendingIntent.getService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-//            views.setOnClickPendingIntent(R.id.refresh, pendingServiceIntent);
-//
-//            context.startService(serviceIntent);
-//            appWidgetManager.updateAppWidget(appWidgetId, views);
-
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"));
-//            Intent intent = new Intent();
-            ///////////////////////////////////////////////////////////
-//            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-//            PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent, 0);
-//            views.setOnClickPendingIntent(R.id.imageReloadButton, pendingIntent);
-//            updateAppWidget(context, appWidgetManager, appWidgetId);
-
-///////////////////////////////////////////////////////////
-//            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
-//            Intent configIntent = new Intent(context, AppCompatPreferenceActivity.class);
-//            PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, 0);
-//            remoteViews.setOnClickPendingIntent(R.id.simple_widget, configPendingIntent);
-//            appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
-///////////////////////////////////////////////////////////
-
-/*            Intent serviceIntent = new Intent(context, loadItemService.class);
-            serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            PendingIntent pendingServiceIntent = PendingIntent.getService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
-            views.setOnClickPendingIntent(R.id.imageReloadButton, pendingServiceIntent);
-            updateAppWidget(context, appWidgetManager, appWidgetId);*/
         }
     }
 
