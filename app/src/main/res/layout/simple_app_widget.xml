@@ -1,6 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="#000"
     android:padding="@dimen/widget_margin"
     android:gravity="center_horizontal"
@@ -11,30 +12,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:padding="5px" />
+        android:padding="5dp" />
 
     <TextView
         android:id="@+id/widget_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:text="@string/appwidget_loading"
         android:textSize="12sp"
         android:textStyle="bold|italic"
+        android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_below="@+id/user_given_title" />
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="8dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageReloadButton"
         android:src="@android:drawable/ic_popup_sync"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true" />
-
-
-</RelativeLayout>
+        android:layout_gravity="end"
+        android:clickable="true"
+        android:baselineAlignBottom="false"
+        android:maxWidth="40dp"
+        android:maxHeight="40dp" />
+</LinearLayout>

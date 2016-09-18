@@ -15,19 +15,21 @@
         android:id="@+id/appwidget_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:inputType="text"
+        android:hint="@string/my_title_hint"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/configure" />
+        android:hint="@string/configure" />
 
     <EditText
         android:id="@+id/appwidget_provider_token"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:inputType="text"
+        android:hint="@string/provider_token_hint"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,7 +40,8 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/theme_spinner" />
+        android:id="@+id/theme_spinner"
+        android:dropDownWidth="150dp"/>
 
     <Button
         android:id="@+id/add_button"

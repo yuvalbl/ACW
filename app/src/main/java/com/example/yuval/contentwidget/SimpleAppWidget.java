@@ -82,7 +82,7 @@ public class SimpleAppWidget extends AppWidgetProvider {
         if(widgetProviderToken == "" || widgetProviderToken == " " || widgetProviderToken == null)
             return;
 
-        GetItems.AsyncResponse responseMethod = new GetItems.AsyncResponse(){
+        WebApiAsyncTask.AsyncResponse responseMethod = new WebApiAsyncTask.AsyncResponse(){
             @Override
             public void processFinish(String output){
                 //getting result fired from async class of onPostExecute(result) method.
@@ -98,7 +98,7 @@ public class SimpleAppWidget extends AppWidgetProvider {
                 appWidgetManager.updateAppWidget(widgetId, views);
             }
         };
-        new GetItems(responseMethod, widgetProviderToken).execute();
+        new WebApiAsyncTask(responseMethod, "items","provider", widgetProviderToken).execute();
     }
 
     @Override

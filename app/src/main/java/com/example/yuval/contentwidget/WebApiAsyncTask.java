@@ -15,17 +15,22 @@ import java.net.URL;
 /**
  * Async task class to get json by making HTTP call
  * */
-public class GetItems extends AsyncTask<String, Void, String> {
+public class WebApiAsyncTask extends AsyncTask<String, Void, String> {
     // you may separate this or combined to caller class.
     public interface AsyncResponse {
         void processFinish(String output);
     }
-    public String providerToken;
+    public String requestQueryString;
+    public String requestParamKey;
+    public String requestParamValue;
     public AsyncResponse delegate = null;
 
-    public GetItems(AsyncResponse delegate, String providerToken){
+    public WebApiAsyncTask(AsyncResponse delegate, String requestQueryString, String requestParamKey,
+                    String requestParamValue){
         this.delegate = delegate;
-        this.providerToken = providerToken;
+        this.requestQueryString = requestQueryString;
+        this.requestParamKey = requestParamKey;
+        this.requestParamValue = requestParamValue;
     }
 
     @Override
@@ -36,8 +41,9 @@ public class GetItems extends AsyncTask<String, Void, String> {
         // Making a request to url and getting response
         try {
 //            URL dataUrl = new URL("http://frontendfrontier.net/json/items.json");
-            if(this.providerToken != "" && this.providerToken != null) {
-                URL dataUrl = new URL("https://acw-server.ddns.net/items?provider=" + this.providerToken);
+            URL dataUrl = buildRequestDataURL();
+            if(dataUrl != null) {
+
                 //dev
 //                URL dataUrl = new URL("https://acw-server.ddns.net/items?provider=TEST");
                 DataProvider dp = new DataProvider();
@@ -49,6 +55,7 @@ public class GetItems extends AsyncTask<String, Void, String> {
 //            delegate.processFinish(jsonStr);
         }
         catch (Exception e) {
+            Log.e("doInBackground", "Error using DataProvider>sendGet");
             e.printStackTrace();
         }
 
@@ -66,6 +73,33 @@ public class GetItems extends AsyncTask<String, Void, String> {
         }
 
         return jsonStr;
+    }
+
+    //create request URL. example for valid string:
+    // "https://acw-server.ddns.net/items?provider=TOKEN"
+    private URL buildRequestDataURL() {
+        boolean itemRequest = this.requestQueryString == "items";
+        boolean validRequestParam = this.requestParamKey != null && this.requestParamKey != "";
+        validRequestParam = validRequestParam && this.requestParamValue != null &&
+                this.requestParamValue != "";
+
+        String requestString;
+        URL dataUrl = null;
+
+        //if valid parameter provided OR request is not "items" request
+        if(validRequestParam || !itemRequest ) {
+            requestString = "https://acw-server.ddns.net/" + this.requestQueryString;
+            if(validRequestParam) {
+                requestString += "?" + this.requestParamKey + "=" + this.requestParamValue;
+            }
+            try {
+                dataUrl = new URL(requestString);
+            } catch (Exception e) {
+                Log.e("buildRequestDataURL", "Error while building data Url");
+                e.printStackTrace();
+            }
+        }
+        return dataUrl;
     }
 
     @Override
