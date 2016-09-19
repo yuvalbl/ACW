@@ -20,11 +20,14 @@ public class SimpleAppWidget extends AppWidgetProvider {
                                 final int appWidgetId) {
         //get settings data
         String widgetTitle = SimpleAppWidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-        String widgetProviderToken = SimpleAppWidgetConfigureActivity.loadProviderTokenPref(context, appWidgetId);
-        SimpleAppWidgetTheme theme = SimpleAppWidgetConfigureActivity.loadThemePref(context, appWidgetId);
+        String widgetProviderToken = SimpleAppWidgetConfigureActivity
+                .loadProviderTokenPref(context, appWidgetId);
+        SimpleAppWidgetTheme theme = SimpleAppWidgetConfigureActivity
+                .loadThemePref(context, appWidgetId);
 
         // Construct the RemoteViews object
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
+        final RemoteViews views = new RemoteViews(context.getPackageName(),
+                R.layout.simple_app_widget);
         views.setTextViewText(R.id.user_given_title, widgetTitle);
 
         //set text color
@@ -38,10 +41,10 @@ public class SimpleAppWidget extends AppWidgetProvider {
         views.setInt(R.id.appwidget_layout, "setBackgroundColor", bgColor);
 
         //set button color (if required)
-//        if(theme.getButtonColor() != null) {
-//            int buttonColor = ContextCompat.getColor(context, theme.getButtonColor());
-//            views.setInt(R.id.imageReloadButton, "setColorFilter", buttonColor);
-//        }
+        if(theme.getButtonColor() != 0) {
+            int buttonColor = ContextCompat.getColor(context, theme.getButtonColor());
+            views.setInt(R.id.imageReloadButton, "setColorFilter", buttonColor);
+        }
 
         // Register an onClickListener
         Intent intent = new Intent(context, SimpleAppWidget.class);
@@ -78,8 +81,10 @@ public class SimpleAppWidget extends AppWidgetProvider {
     static void updateContent (final AppWidgetManager appWidgetManager,
                                       final RemoteViews views, final int widgetId,
                                       String widgetProviderToken) {
-        if(widgetProviderToken == "" || widgetProviderToken == " " || widgetProviderToken == null)
+        if(widgetProviderToken.isEmpty() || widgetProviderToken.equals(" ") ||
+                widgetProviderToken == null) {
             return;
+        }
 
         WebApiAsyncTask.AsyncResponse responseMethod = new WebApiAsyncTask.AsyncResponse(){
             @Override
@@ -106,13 +111,15 @@ public class SimpleAppWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-//        Log.d("onUpdate: ", "appWidgetIds> " + Arrays.toString(appWidgetIds));
+    public void onUpdate(Context context, final AppWidgetManager appWidgetManager,
+                         int[] appWidgetIds) {
         int appWidgetId = appWidgetIds[0];
-        String widgetProviderToken = SimpleAppWidgetConfigureActivity.loadProviderTokenPref(context, appWidgetId);
+        String widgetProviderToken = SimpleAppWidgetConfigureActivity
+                .loadProviderTokenPref(context, appWidgetId);
 
         //set content while fetching items from server
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
+        final RemoteViews views = new RemoteViews(context.getPackageName(),
+                R.layout.simple_app_widget);
         views.setTextViewText(R.id.widget_content, "Loading...");
         appWidgetManager.updateAppWidget(appWidgetId, views);
         //get new content item async

@@ -1,14 +1,12 @@
 package com.example.yuval.contentwidget;
 
-import android.graphics.Color;
-
 /**
  * Created by Yuval on 17/09/2016.
  */
 public class SimpleAppWidgetTheme {
-    private int textColor;
-    private int backgroundColor;
-    private int buttonColor;
+    private int textColor = 0;
+    private int backgroundColor = 0;
+    private int buttonColor = 0;
 
     SimpleAppWidgetTheme(String theme) {
         switch (theme) {
@@ -32,6 +30,7 @@ public class SimpleAppWidgetTheme {
             case "Green Emerald":
                 textColor = R.color.greenEmeraldText;
                 backgroundColor = R.color.greenEmeraldBackground;
+                buttonColor = R.color.greenEmeraldButton;
                 break;
         }
     }

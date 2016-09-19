@@ -20,6 +20,7 @@
 
     <color name="greenEmeraldText">#0040ff</color>
     <color name="greenEmeraldBackground">#b443ff40</color>
+    <color name="greenEmeraldButton">#0040ff</color>
 
     <color name="toastError">#b8fc3131</color>
 </resources>
