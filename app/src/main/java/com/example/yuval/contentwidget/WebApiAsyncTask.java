@@ -43,34 +43,25 @@ public class WebApiAsyncTask extends AsyncTask<String, Void, String> {
 //            URL dataUrl = new URL("http://frontendfrontier.net/json/items.json");
             URL dataUrl = buildRequestDataURL();
             if(dataUrl != null) {
-
-                //dev
-//                URL dataUrl = new URL("https://acw-server.ddns.net/items?provider=TEST");
                 DataProvider dp = new DataProvider();
                 jsonStr = dp.sendGet(dataUrl);
             }
-            System.out.println("jsonStr: " + jsonStr);
-
-//            Log.d("Response: ", "> " + jsonStr);
-//            delegate.processFinish(jsonStr);
+//            System.out.println("jsonStr: " + jsonStr);
         }
         catch (Exception e) {
             Log.e("doInBackground", "Error using DataProvider>sendGet");
             e.printStackTrace();
         }
-
-
-
-        if (jsonStr != null) {
-            try {
-                JSONObject jsonObj = new JSONObject(jsonStr);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Log.e("Get Items", "Couldn't get any data from the url");
-        }
+//        if (jsonStr != null) {
+//            try {
+//                JSONObject jsonObj = new JSONObject(jsonStr);
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            Log.e("Get Items", "Couldn't get any data from the url");
+//        }
 
         return jsonStr;
     }
@@ -78,10 +69,10 @@ public class WebApiAsyncTask extends AsyncTask<String, Void, String> {
     //create request URL. example for valid string:
     // "https://acw-server.ddns.net/items?provider=TOKEN"
     private URL buildRequestDataURL() {
-        boolean itemRequest = this.requestQueryString == "items";
-        boolean validRequestParam = this.requestParamKey != null && this.requestParamKey != "";
+        boolean itemRequest = this.requestQueryString.equals("items");
+        boolean validRequestParam = this.requestParamKey != null && !this.requestParamKey.isEmpty();
         validRequestParam = validRequestParam && this.requestParamValue != null &&
-                this.requestParamValue != "";
+                !this.requestParamValue.isEmpty();
 
         String requestString;
         URL dataUrl = null;

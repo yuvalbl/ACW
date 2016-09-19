@@ -6,13 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 /**
  * The configuration screen for the {@link SimpleAppWidget SimpleAppWidget} AppWidget.
@@ -23,20 +30,33 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
     private static final String PREF_TITLE_PREFIX_KEY = "appwidget_title_";
     private static final String PREF_PROVIDER_TOKEN_PREFIX_KEY = "appwidget_provider_token_";
     private static final String PREF_THEME_PREFIX_KEY = "appwidget_theme_token_";
+    private static contentProvider[] contentProviders;
+    private static View errorToast;
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetTitleText;
     EditText mAppWidgetTokenIdText;
     TextView mAppWidgetThemeText;
+
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = SimpleAppWidgetConfigureActivity.this;
 
-            // store the title string
-            String widgetText = mAppWidgetTitleText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, widgetText);
+
+            //get provider token
+            String widgetText = mAppWidgetTokenIdText.getText().toString();
+            //validate provider token
+            if(!isValidateProviderToken(widgetText)) {
+                showValidationMessage(widgetText);
+                return;
+            }
+
             // store the provider token string
-            widgetText = mAppWidgetTokenIdText.getText().toString();
             saveProviderTokenPref(context, mAppWidgetId, widgetText);
+
+            // store the title string
+            widgetText = mAppWidgetTitleText.getText().toString();
+            saveTitlePref(context, mAppWidgetId, widgetText);
+
             // store the theme string
             widgetText = mAppWidgetThemeText.getText().toString();
             saveThemePref(context, mAppWidgetId, widgetText);
@@ -52,6 +72,49 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
             finish();
         }
     };
+
+    private void createErrorToast() {
+        LayoutInflater inflater = getLayoutInflater();
+        errorToast = inflater.inflate(R.layout.error_toast,
+                (ViewGroup) findViewById(R.id.error_toast_layout));
+    }
+    private void showValidationMessage(String enteredProviderToken) {
+        String message;
+        TextView toastText = (TextView) errorToast.findViewById(R.id.error_toast_text);
+        int toastErrorColor = ContextCompat.getColor(this, R.color.toastError);
+
+        //set appropriate error message
+        if(contentProviders == null || contentProviders.length == 0) {
+            message = "Provider list not found. Please wait while provider list is loaded from the server";
+        } else {
+            if(enteredProviderToken == null || enteredProviderToken.isEmpty()) {
+                message = "Please enter provider token.";
+            } else {
+                message = "The token " + enteredProviderToken + " is not a valid provider token";
+            }
+            errorToast.setBackgroundColor(toastErrorColor);
+        }
+
+        toastText.setText(message);
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(errorToast);
+        toast.show();
+    }
+
+    static boolean isValidateProviderToken(String widgetText) {
+        boolean isValid = false;
+        if(contentProviders != null && contentProviders.length>0) {
+            for (contentProvider cp : contentProviders) {
+                if(widgetText.equals(cp.provider.token)) {
+                    isValid = true;
+                    break;
+                }
+            }
+        }
+        return isValid;
+    }
 
     public SimpleAppWidgetConfigureActivity() {
         super();
@@ -115,6 +178,19 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
+        WebApiAsyncTask.AsyncResponse responseMethod = new WebApiAsyncTask.AsyncResponse(){
+            @Override
+            public void processFinish(String output){
+                //getting result fired from async class of onPostExecute(result) method.
+                //Parse json
+                contentProviders = new Gson().fromJson(output, contentProvider[].class);
+//                for (contentProvider cp : contentProviders) {
+//                    Log.d("contentProviders: ", "> " + cp.provider.token);
+//                }
+            }
+        };
+        new WebApiAsyncTask(responseMethod, "providers", null, null).execute();
+
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
@@ -150,14 +226,19 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
             return;
         }
 
-        mAppWidgetTokenIdText.setText(loadProviderTokenPref(SimpleAppWidgetConfigureActivity.this, mAppWidgetId));
+//        mAppWidgetTokenIdText.setText(loadProviderTokenPref(SimpleAppWidgetConfigureActivity.this, mAppWidgetId));
+
+        createErrorToast();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         mAppWidgetThemeText = (TextView) view;
-        String themeString = mAppWidgetThemeText.getText().toString();
-        Toast.makeText(SimpleAppWidgetConfigureActivity.this, themeString, Toast.LENGTH_SHORT).show();
+//        String themeString = mAppWidgetThemeText.getText().toString();
+//        Toast.makeText(SimpleAppWidgetConfigureActivity.this, themeString, Toast.LENGTH_SHORT).show();
+//        if(contentProviders != null && contentProviders.length>0)
+//        Toast.makeText(SimpleAppWidgetConfigureActivity.this, contentProviders[0].provider.token, Toast.LENGTH_SHORT).show();
+//        Toast.makeText().show();
 
 //        SimpleAppWidgetTheme theme  = new SimpleAppWidgetTheme(themeString);
 //        Toast.makeText(SimpleAppWidgetConfigureActivity.this, theme.getTextColor() +':' + theme.getBackgroundColor(), Toast.LENGTH_SHORT).show();
