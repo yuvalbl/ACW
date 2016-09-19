@@ -10,6 +10,7 @@
 
     <color name="brightWhiteText">#000000</color>
     <color name="brightWhiteBackground">#e6ffffff</color>
+    <color name="brightWhiteButton">#000000</color>
 
     <color name="blueSkyText">#ffffff</color>
     <color name="blueSkyBackground">#b41a62ff</color>

@@ -8,6 +8,7 @@ import android.graphics.Color;
 public class SimpleAppWidgetTheme {
     private int textColor;
     private int backgroundColor;
+    private int buttonColor;
 
     SimpleAppWidgetTheme(String theme) {
         switch (theme) {
@@ -18,6 +19,7 @@ public class SimpleAppWidgetTheme {
             case "Bright White":
                 textColor = R.color.brightWhiteText;
                 backgroundColor = R.color.brightWhiteBackground;
+                buttonColor = R.color.brightWhiteButton;
                 break;
             case "Blue Sky":
                 textColor = R.color.blueSkyText;
@@ -41,5 +43,9 @@ public class SimpleAppWidgetTheme {
 
     public int getTextColor() {
         return textColor;
+    }
+
+    public int getButtonColor() {
+        return buttonColor;
     }
 }

@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="@string/my_title_hint"/>
+        android:hint="@string/my_title_hint"
+        android:maxLength="22"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -38,10 +39,9 @@
         android:text="@string/widget_theme" />
 
     <Spinner
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/theme_spinner"
-        android:dropDownWidth="150dp"/>
+        android:id="@+id/theme_spinner"/>
 
     <Button
         android:id="@+id/add_button"

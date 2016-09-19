@@ -183,12 +183,9 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
         WebApiAsyncTask.AsyncResponse responseMethod = new WebApiAsyncTask.AsyncResponse(){
             @Override
             public void processFinish(String output){
-                //getting result fired from async class of onPostExecute(result) method.
-                //Parse json
-                contentProviders = new Gson().fromJson(output, contentProvider[].class);
-//                for (contentProvider cp : contentProviders) {
-//                    Log.d("contentProviders: ", "> " + cp.provider.token);
-//                }
+            //getting result fired from async class of onPostExecute(result) method.
+            //Parse json
+            contentProviders = new Gson().fromJson(output, contentProvider[].class);
             }
         };
         new WebApiAsyncTask(responseMethod, "providers", null, null).execute();
@@ -227,25 +224,6 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
             finish();
             return;
         }
-
-//        mAppWidgetTokenIdText.setText(loadProviderTokenPref(SimpleAppWidgetConfigureActivity.this, mAppWidgetId));
-
-
-
-
-
-//        widgetProviderToken = SimpleAppWidgetConfigureActivity.loadProviderTokenPref(context, widgetId);
-
-
-//        appWidgetManager.updateAppWidget(widgetId, views);
-
-//        updateContent(appWidgetManager, views, widgetId, widgetProviderToken);
-
-
-
-
-
-
 
         createErrorToast();
     }

@@ -37,6 +37,12 @@ public class SimpleAppWidget extends AppWidgetProvider {
         int bgColor = ContextCompat.getColor(context, theme.getBackgroundColor());
         views.setInt(R.id.appwidget_layout, "setBackgroundColor", bgColor);
 
+        //set button color (if required)
+//        if(theme.getButtonColor() != null) {
+//            int buttonColor = ContextCompat.getColor(context, theme.getButtonColor());
+//            views.setInt(R.id.imageReloadButton, "setColorFilter", buttonColor);
+//        }
+
         // Register an onClickListener
         Intent intent = new Intent(context, SimpleAppWidget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);

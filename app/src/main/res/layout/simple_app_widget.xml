@@ -1,18 +1,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="#000"
+    android:background="#b4000000"
     android:padding="@dimen/widget_margin"
-    android:gravity="center_horizontal"
     android:id="@+id/appwidget_layout">
 
-    <TextView
-        android:id="@+id/user_given_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:padding="5dp" />
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="1dp">
+
+        <TextView
+            android:id="@+id/user_given_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="center_horizontal"
+            android:padding="0dp" />
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="26dp"
+            android:layout_weight="0"
+            android:id="@+id/imageReloadButton"
+            android:src="@android:drawable/ic_popup_sync"
+            android:layout_gravity="end"
+            android:clickable="true"
+            android:baselineAlignBottom="false"
+            android:maxWidth="26dp"
+            android:maxHeight="26dp"
+            android:padding="0dp"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/widget_content"
@@ -21,20 +43,8 @@
         android:text="@string/appwidget_loading"
         android:textSize="12sp"
         android:textStyle="bold|italic"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="8dp" />
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="8dp"/>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageReloadButton"
-        android:src="@android:drawable/ic_popup_sync"
-        android:layout_gravity="end"
-        android:clickable="true"
-        android:baselineAlignBottom="false"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp" />
 </LinearLayout>
