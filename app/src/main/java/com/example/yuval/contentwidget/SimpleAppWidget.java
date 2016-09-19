@@ -3,24 +3,11 @@ package com.example.yuval.contentwidget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.RemoteViews;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Random;
-
-import javax.net.ssl.HttpsURLConnection;
-import org.json.*;
-import android.os.AsyncTask;
-
 import com.google.gson.Gson;
 
 /**
@@ -44,25 +31,31 @@ public class SimpleAppWidget extends AppWidgetProvider {
         int textColor = ContextCompat.getColor(context, theme.getTextColor());
         views.setTextColor(R.id.user_given_title, textColor);
         views.setTextColor(R.id.widget_content, textColor);
+        views.setTextViewText(R.id.widget_content, "Loading...");
 
         //set background color
         int bgColor = ContextCompat.getColor(context, theme.getBackgroundColor());
         views.setInt(R.id.appwidget_layout, "setBackgroundColor", bgColor);
 
+        // Register an onClickListener
+        Intent intent = new Intent(context, SimpleAppWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, new int[] {appWidgetId});
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        views.setOnClickPendingIntent(R.id.imageReloadButton, pendingIntent);
+
         //update style
         appWidgetManager.updateAppWidget(appWidgetId, views);
-
-        Log.d("$$widgetProviderToken: ", "> " + widgetProviderToken);
-        Log.d("getTextColor: ", "> " + theme.getTextColor());
-
+        //update view
         updateContent(appWidgetManager, views, appWidgetId, widgetProviderToken);
     }
 
     //extract random item from JSON string
-    static String getRandomContentItem(String jsonString) {
+    static String getRandomContentItem(contentItem[] items) {
         String resultItemString = null;
-        //Parse json
-        contentItem[] items = new Gson().fromJson(jsonString, contentItem[].class);
+
 
         //get random item index
         Random rand = new Random();
@@ -86,48 +79,38 @@ public class SimpleAppWidget extends AppWidgetProvider {
             @Override
             public void processFinish(String output){
                 //getting result fired from async class of onPostExecute(result) method.
-                Log.d("processFinish: ", "> " + output);
-                String item = getRandomContentItem(output);
+                String content;
+                //Parse json
+                contentItem[] items = new Gson().fromJson(output, contentItem[].class);
 
-                if(item != null) {
-                    views.setTextViewText(R.id.widget_content, item);
+                if(items == null) {
+                    content = "Error occurred, Please try again later.";
+                } else if(items.length == 0) {
+                    content = "The provider has no items for display.";
                 } else {
-                    views.setTextViewText(R.id.widget_content, "Error occurred, Please try again later.");
-
+                    content = getRandomContentItem(items);
                 }
+
+                //set content and update view
+                views.setTextViewText(R.id.widget_content, content);
                 appWidgetManager.updateAppWidget(widgetId, views);
             }
         };
-        new WebApiAsyncTask(responseMethod, "items","provider", widgetProviderToken).execute();
+        new WebApiAsyncTask(responseMethod, "items","token", widgetProviderToken).execute();
     }
 
     @Override
     public void onUpdate(Context context, final AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        String widgetProviderToken;
-        // There may be multiple widgets active, so update all of them
-        ComponentName thisWidget = new ComponentName(context, SimpleAppWidget.class);
-        int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+//        Log.d("onUpdate: ", "appWidgetIds> " + Arrays.toString(appWidgetIds));
+        int appWidgetId = appWidgetIds[0];
+        String widgetProviderToken = SimpleAppWidgetConfigureActivity.loadProviderTokenPref(context, appWidgetId);
 
-//        for (int appWidgetId : appWidgetIds) {
-        for (final int widgetId : allWidgetIds) {
-
-            widgetProviderToken = SimpleAppWidgetConfigureActivity.loadProviderTokenPref(context, widgetId);
-
-            final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
-            views.setTextViewText(R.id.widget_content, "Loading...");
-
-            // Register an onClickListener
-            Intent intent = new Intent(context, SimpleAppWidget.class);
-            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            views.setOnClickPendingIntent(R.id.imageReloadButton, pendingIntent);
-            appWidgetManager.updateAppWidget(widgetId, views);
-
-            updateContent(appWidgetManager, views, widgetId, widgetProviderToken);
-        }
+        //set content while fetching items from server
+        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.simple_app_widget);
+        views.setTextViewText(R.id.widget_content, "Loading...");
+        appWidgetManager.updateAppWidget(appWidgetId, views);
+        //get new content item async
+        updateContent(appWidgetManager, views, appWidgetId, widgetProviderToken);
     }
 
     @Override

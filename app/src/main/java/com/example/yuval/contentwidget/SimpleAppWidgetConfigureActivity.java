@@ -1,6 +1,7 @@
 package com.example.yuval.contentwidget;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RemoteViews;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -227,6 +229,23 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
         }
 
 //        mAppWidgetTokenIdText.setText(loadProviderTokenPref(SimpleAppWidgetConfigureActivity.this, mAppWidgetId));
+
+
+
+
+
+//        widgetProviderToken = SimpleAppWidgetConfigureActivity.loadProviderTokenPref(context, widgetId);
+
+
+//        appWidgetManager.updateAppWidget(widgetId, views);
+
+//        updateContent(appWidgetManager, views, widgetId, widgetProviderToken);
+
+
+
+
+
+
 
         createErrorToast();
     }
