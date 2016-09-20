@@ -14,11 +14,17 @@ import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
 
 /**
- * Created by Yuval on 26/07/2016.
+ * Wrap HTTPS request for webservice API
  */
 public class DataProvider {
 
     // HTTP/HTTPS GET request
+    /**
+     * Initiate HTTPS request. should match webservice API
+     * Currently ignore security certificate (Non exist at the moment)
+     * @param targetURL target url according to WCA API
+     * @return result string
+     */
     protected String sendGet(URL targetURL) throws Exception {
 
         //=========== SKIP HTTPS CERTIFICATION - FOR DEV ONLY! =========
@@ -34,7 +40,6 @@ public class DataProvider {
             @Override
             public void checkServerTrusted(X509Certificate[] chain, String authType) {
             }
-
         };
         TrustManager[] trustAllCerts = new TrustManager[]{tm};
 
@@ -53,27 +58,17 @@ public class DataProvider {
         // Install the all-trusting host verifier
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
         //=========== SKIP HTTPS CERTIFICATION - FOR DEV ONLY! END=========
-
-
-
-        System.out.println("\nsendGet start");
-
-//        URL obj = new URL(url);
-        URL obj = targetURL;
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        System.out.println("\nsendGet con");
-
+        HttpURLConnection con = (HttpURLConnection) targetURL.openConnection();
         // optional default is GET
+
         con.setRequestMethod("GET");
 
         //add request header
         int responseCode = con.getResponseCode();
-        System.out.println("\nSending 'GET' request to URL : " + targetURL);
-        System.out.println("Response Code : " + responseCode);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
 
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);

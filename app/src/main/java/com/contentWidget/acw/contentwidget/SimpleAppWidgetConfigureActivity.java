@@ -36,10 +36,10 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
     EditText mAppWidgetTokenIdText;
     TextView mAppWidgetThemeText;
 
+    //set click event for "create widget" button
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = SimpleAppWidgetConfigureActivity.this;
-
 
             //get provider token
             String widgetText = mAppWidgetTokenIdText.getText().toString();
@@ -72,11 +72,31 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
         }
     };
 
+    //check user entered valid provider token
+    static boolean isValidateProviderToken(String enteredProviderToken) {
+        boolean isValid = false;
+        if(contentProviders != null && contentProviders.length>0) {
+            for (contentProvider cp : contentProviders) {
+                if(enteredProviderToken.equals(cp.provider.token)) {
+                    isValid = true;
+                    break;
+                }
+            }
+        }
+        return isValid;
+    }
+
+    //create custom toast (different color theme for standard / error messages)
     private void createErrorToast() {
         LayoutInflater inflater = getLayoutInflater();
         errorToast = inflater.inflate(R.layout.error_toast,
                 (ViewGroup) findViewById(R.id.error_toast_layout));
     }
+
+    /**
+     * show toast message when user entered invalid provider token
+     * @param enteredProviderToken user entered provider token
+     */
     private void showValidationMessage(String enteredProviderToken) {
         String message;
         TextView toastText = (TextView) errorToast.findViewById(R.id.error_toast_text);
@@ -94,6 +114,7 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
             errorToast.setBackgroundColor(toastErrorColor);
         }
 
+        //set message and display in new Toast
         toastText.setText(message);
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
@@ -102,44 +123,31 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
         toast.show();
     }
 
-    static boolean isValidateProviderToken(String widgetText) {
-        boolean isValid = false;
-        if(contentProviders != null && contentProviders.length>0) {
-            for (contentProvider cp : contentProviders) {
-                if(widgetText.equals(cp.provider.token)) {
-                    isValid = true;
-                    break;
-                }
-            }
-        }
-        return isValid;
-    }
-
     public SimpleAppWidgetConfigureActivity() {
         super();
     }
 
-    // Write the prefix to the SharedPreferences object for this widget
+    // Write the prefix to the SharedPreferences object widget title
     static void saveTitlePref(Context context, int appWidgetId, String text) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_TITLE_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
     }
-    // Write the prefix to the SharedPreferences object for this widget
+    // Write the prefix to the SharedPreferences object for provider token
     static void saveProviderTokenPref(Context context, int appWidgetId, String text) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_PROVIDER_TOKEN_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
     }
-    // Write the prefix to the SharedPreferences object for this widget
+    // Write the prefix to the SharedPreferences object for widget theme
     static void saveThemePref(Context context, int appWidgetId, String text) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_THEME_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
     }
 
-    // Read the prefix from the SharedPreferences object for this widget.
-    // If there is no preference saved, get the default from a resource
+    // Read the prefix from the SharedPreferences object for this widget title.
+    // If there is no preference saved, return empty string
     static String loadTitlePref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         String titleValue = prefs.getString(PREF_TITLE_PREFIX_KEY + appWidgetId, null);
@@ -149,7 +157,7 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
             return "";
         }
     }
-    // Read the prefix from the SharedPreferences object for this widget.
+    // Read the prefix from the SharedPreferences object for this widget provider tokrn.
     // If there is no preference saved, get the default from a resource
     static String loadProviderTokenPref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
@@ -160,8 +168,7 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
             return context.getString(R.string.appwidget_provider_token);
         }
     }
-    // Read the prefix from the SharedPreferences object for this widget.
-    // If there is no preference saved, get the default from a resource
+    // Read the prefix from the SharedPreferences object for this widget theme.
     static SimpleAppWidgetTheme loadThemePref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         String themeString = prefs.getString(PREF_THEME_PREFIX_KEY + appWidgetId, null);
@@ -228,14 +235,6 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         mAppWidgetThemeText = (TextView) view;
-//        String themeString = mAppWidgetThemeText.getText().toString();
-//        Toast.makeText(SimpleAppWidgetConfigureActivity.this, themeString, Toast.LENGTH_SHORT).show();
-//        if(contentProviders != null && contentProviders.length>0)
-//        Toast.makeText(SimpleAppWidgetConfigureActivity.this, contentProviders[0].provider.token, Toast.LENGTH_SHORT).show();
-//        Toast.makeText().show();
-
-//        SimpleAppWidgetTheme theme  = new SimpleAppWidgetTheme(themeString);
-//        Toast.makeText(SimpleAppWidgetConfigureActivity.this, theme.getTextColor() +':' + theme.getBackgroundColor(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

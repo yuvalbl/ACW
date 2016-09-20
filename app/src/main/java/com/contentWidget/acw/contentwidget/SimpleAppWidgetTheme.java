@@ -1,13 +1,14 @@
 package com.contentWidget.acw.contentwidget;
 
 /**
- * Created by Yuval on 17/09/2016.
+ * Represent a theme (layout color set)
  */
 public class SimpleAppWidgetTheme {
     private int textColor = 0;
     private int backgroundColor = 0;
     private int buttonColor = 0;
 
+    //constructor, get theme name string
     SimpleAppWidgetTheme(String theme) {
         switch (theme) {
             case "Classic Black":

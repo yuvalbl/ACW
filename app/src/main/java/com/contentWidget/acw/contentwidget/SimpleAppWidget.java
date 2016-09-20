@@ -16,6 +16,7 @@ import com.google.gson.Gson;
  */
 public class SimpleAppWidget extends AppWidgetProvider {
 
+    //implements user preferences after SimpleAppWidgetConfigureActivity finish
     static void updateAppWidget(Context context, final AppWidgetManager appWidgetManager,
                                 final int appWidgetId) {
         //get settings data
@@ -61,10 +62,9 @@ public class SimpleAppWidget extends AppWidgetProvider {
         updateContent(appWidgetManager, views, appWidgetId, widgetProviderToken);
     }
 
-    //extract random item from JSON string
+    //extract random item from contentItem Array
     static String getRandomContentItem(contentItem[] items) {
         String resultItemString = null;
-
 
         //get random item index
         Random rand = new Random();
@@ -77,15 +77,22 @@ public class SimpleAppWidget extends AppWidgetProvider {
         return resultItemString;
     }
 
-    //update content with new random item
+    /**
+     * update widget content with new random item
+     * @param appWidgetManager manger use for updating view
+     * @param views remote widget views
+     * @param widgetId id of the widget which should be updated
+     * @param widgetProviderToken token according to user selected provider
+     */
     static void updateContent (final AppWidgetManager appWidgetManager,
                                       final RemoteViews views, final int widgetId,
                                       String widgetProviderToken) {
+        //in case data is missing (e.g. on widget creation auto call) - return
         if(widgetProviderToken.isEmpty() || widgetProviderToken.equals(" ") ||
                 widgetProviderToken == null) {
             return;
         }
-
+        //set async with response action
         WebApiAsyncTask.AsyncResponse responseMethod = new WebApiAsyncTask.AsyncResponse(){
             @Override
             public void processFinish(String output){

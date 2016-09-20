@@ -1,25 +1,26 @@
 package com.contentWidget.acw.contentwidget;
 
-/**
- * Created by Yuval on 26/07/2016.
- */
-
 import android.os.AsyncTask;
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.net.URL;
 
 /**
- * Async task class to get json by making HTTP call
+ * Async task class to get json by making HTTP/S call
  * */
 public class WebApiAsyncTask extends AsyncTask<String, Void, String> {
     // you may separate this or combined to caller class.
+    // AsyncResponse is used for doing job after async action finished.
     public interface AsyncResponse {
         void processFinish(String output);
     }
-    public String requestQueryString;
-    public String requestParamKey;
-    public String requestParamValue;
+    // example for a valid URL: "https://acw-server.ddns.net/items?token=TKN2"
+    public String requestQueryString;       //API main source ("items", "providers" etc.)
+    public String requestParamKey;          //API parameter key (e.g. "token")
+    public String requestParamValue;        //API parameter value (e.g. "TKN2")
     public AsyncResponse delegate = null;
 
     public WebApiAsyncTask(AsyncResponse delegate, String requestQueryString, String requestParamKey,
@@ -32,39 +33,37 @@ public class WebApiAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... arg0) {
-        // Creating service handler class instance
-//            ServiceHandler sh = new ServiceHandler();
         String jsonStr = null;
         // Making a request to url and getting response
         try {
-//            URL dataUrl = new URL("http://frontendfrontier.net/json/items.json");
             URL dataUrl = buildRequestDataURL();
             if(dataUrl != null) {
                 DataProvider dp = new DataProvider();
                 jsonStr = dp.sendGet(dataUrl);
             }
-//            System.out.println("jsonStr: " + jsonStr);
         }
         catch (Exception e) {
             Log.e("doInBackground", "Error using DataProvider>sendGet");
             e.printStackTrace();
         }
-//        if (jsonStr != null) {
-//            try {
-//                JSONObject jsonObj = new JSONObject(jsonStr);
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            Log.e("Get Items", "Couldn't get any data from the url");
-//        }
+
+        //check JSON result
+        if (jsonStr != null) {
+            try {
+                JSONArray jsonArray = new JSONArray(jsonStr);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.e("Get Items", "Couldn't get any data from the url");
+        }
 
         return jsonStr;
     }
 
-    //create request URL. example for valid string:
-    // "https://acw-server.ddns.net/items?provider=TOKEN"
+    // create request URL by parameters passed to WebApiAsyncTask constructor.
+    // example for valid string: "https://acw-server.ddns.net/items?token=TKN2"
     private URL buildRequestDataURL() {
         boolean itemRequest = this.requestQueryString.equals("items");
         boolean validRequestParam = this.requestParamKey != null && !this.requestParamKey.isEmpty();

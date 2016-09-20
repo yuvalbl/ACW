@@ -3,7 +3,7 @@ package com.contentWidget.acw.contentwidget;
 import java.util.Date;
 
 /**
- * Created by Yuval on 18/09/2016.
+ * Work as a POJO for GJON parser (match server JSON structure)
  */
 public class contentProvider {
     Provider provider;
