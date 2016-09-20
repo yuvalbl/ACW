@@ -1,4 +1,4 @@
-package com.example.yuval.contentwidget;
+package com.contentWidget.acw.contentwidget;
 
 /**
  * Created by Yuval on 26/07/2016.
@@ -6,9 +6,6 @@ package com.example.yuval.contentwidget;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.URL;
 

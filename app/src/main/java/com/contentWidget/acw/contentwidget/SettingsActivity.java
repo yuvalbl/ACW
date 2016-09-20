@@ -1,4 +1,4 @@
-package com.example.yuval.contentwidget;
+package com.contentWidget.acw.contentwidget;
 
 
 import android.annotation.TargetApi;

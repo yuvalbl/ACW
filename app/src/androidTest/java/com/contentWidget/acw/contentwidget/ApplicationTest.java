@@ -1,4 +1,4 @@
-package com.example.yuval.contentwidget;
+package com.contentWidget.acw.contentwidget;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

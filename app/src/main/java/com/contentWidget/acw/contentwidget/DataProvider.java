@@ -1,14 +1,9 @@
-package com.example.yuval.contentwidget;
-
-import android.os.AsyncTask;
-
-import org.json.JSONObject;
+package com.contentWidget.acw.contentwidget;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.cert.CertificateException;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;

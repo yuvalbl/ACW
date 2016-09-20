@@ -1,14 +1,12 @@
-package com.example.yuval.contentwidget;
+package com.contentWidget.acw.contentwidget;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RemoteViews;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +25,7 @@ import com.google.gson.Gson;
  */
 public class SimpleAppWidgetConfigureActivity extends Activity implements AdapterView.OnItemSelectedListener  {
 
-    private static final String PREFS_NAME = "com.example.yuval.contentwidget.SimpleAppWidget";
+    private static final String PREFS_NAME = "com.contentWidget.acw.contentwidget.SimpleAppWidget";
     private static final String PREF_TITLE_PREFIX_KEY = "appwidget_title_";
     private static final String PREF_PROVIDER_TOKEN_PREFIX_KEY = "appwidget_provider_token_";
     private static final String PREF_THEME_PREFIX_KEY = "appwidget_theme_token_";
