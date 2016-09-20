@@ -104,10 +104,10 @@ public class SimpleAppWidgetConfigureActivity extends Activity implements Adapte
 
         //set appropriate error message
         if(contentProviders == null || contentProviders.length == 0) {
-            message = "Provider list not found. Please wait while provider list is loaded from the server";
+            message = "Please wait while provider list is loaded from the server";
         } else {
             if(enteredProviderToken == null || enteredProviderToken.isEmpty()) {
-                message = "Please enter provider token.";
+                message = "Please enter provider token";
             } else {
                 message = "The token " + enteredProviderToken + " is not a valid provider token";
             }

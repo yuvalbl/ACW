@@ -102,9 +102,9 @@ public class SimpleAppWidget extends AppWidgetProvider {
                 contentItem[] items = new Gson().fromJson(output, contentItem[].class);
 
                 if(items == null) {
-                    content = "Error occurred, Please try again later.";
+                    content = "Error occurred, please try again later";
                 } else if(items.length == 0) {
-                    content = "The provider has no items for display.";
+                    content = "The provider has no items for display";
                 } else {
                     content = getRandomContentItem(items);
                 }
